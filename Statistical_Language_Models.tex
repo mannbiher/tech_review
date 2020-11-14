@@ -89,9 +89,9 @@ model language accurately.
 	\item Note the numerator of Equation \ref{eq:trigram}. If $w_1$, $w_2$,
 	and $w_3$ never appear in corpus together in the corpus, the probability of 
 	w3 is 0. To solve this, a small $\delta$ can be added to the count of each 
-	word in the vocabulory. This is called \textit{smoothing}.
-	\item Consider the denominator of Euqation \ref{eq:trigram}. 
-	If $w_1$ and $w_2$ never occured togther in the corpus, then 
+	word in the vocabulary. This is called \textit{smoothing}.
+	\item Consider the denominator of Equation \ref{eq:trigram}. 
+	If $w_1$ and $w_2$ never occurred together in the corpus, then 
 	no probability can be calculated for $w_3$.
 	To solve this, we could condition on $w_2$ alone. This is called
 	\textit{backoff}.
@@ -100,12 +100,12 @@ model language accurately.
 
 n-gram language model also suffers from storage problem.
 \begin{itemize}
-	\item As $n$ inreases (or the corpus size increases), the model size increases
+	\item As $n$ increases (or the corpus size increases), the model size increases
 	as well.
 \end{itemize}
 
 \section{Window-based Neural Language Model}
-Bengio et al introduced a Neural Probabilistic Langugae Model. It was
+Bengio et al introduced a Neural Probabilistic Language Model. It was
 first large-scale deep learning model for natural language processing.
 This model learns a \textit{distributed representation of words}, along
 with the probability function for word sequences expressed in terms of
@@ -131,7 +131,7 @@ $W^{(3)}x + b^{(3)}$, that captures all the previous $n$ input word vectors.
 
 A simplified version of this model can be seen in Figure
 \ref{fig:nplmsimple}, where the blue layer represents
-concatenated word embedggings for the input words:
+concatenated word embeddings for the input words:
 $e = [e^{(1)};e^{(2)};e^{(3)};e^{(4)}]$, the red layer signifies
 the hidden layer: $h = f(W_e + b_1)$, and the green output distribution
 is a softmax over the vocabulary: $\hat{y} = softmax(Uh + b_2)$.
@@ -172,12 +172,12 @@ the language model, Recurrent Neural Networks (RNN) are capable
 of conditioning the model on all previous words in the corpus.
 
 Figure \ref{fig:rnn} introduces RNN architecture where each
-vertical reactangular box is a hidden layer at a time-step $t$.
+vertical rectangular box is a hidden layer at a time-step $t$.
 Each such layer holds a number of neurons, each of which performs
 a linear matrix operation on its inputs followed by a non-linear
 operation (e.g. $tanh()$). At each time-step, there are two inputs
 to the hidden layer: the output of previous layer $h_{t-1}$, and
-the input at that timestep $x_t$. The former input is multiplied
+the input at that time-step $x_t$. The former input is multiplied
 by a weight matrix $W^{(hx)}$ to produce output features $h_t$,
 which are multiplied with a weight matrix $W^{(S)}$ and run through
 a softmax over the vocabulary to obtain a prediction output $\hat{y}$
@@ -202,7 +202,7 @@ of the next word(Equation \ref{eq:weight} and \ref{eq:sfmax}).
 	\item The model size does not increase for longer input sequence lengths
 	\item Computation for step $t$ can (in theory) use information from many 
 	steps back
-	\item The same weights are applied to every timestep of the input, so
+	\item The same weights are applied to every time-step of the input, so
 	there is symmetry in how inputs are processed
 \end{itemize}
 
@@ -217,7 +217,7 @@ of the next word(Equation \ref{eq:weight} and \ref{eq:sfmax}).
 
 
 \section{Summary}
-In this review we compared n-grams, neaural and its improvment RNN language model.
+In this review we compared n-grams, neural and its improvement RNN language model.
 We noticed even though n-gram suffers from storage and sparsity problem. It's performance
 is better than neural language models with comparable accuracy. Neural language model
 provides better accuracy, but its accuracy is again restricted by window size. RNN overcomes
@@ -236,7 +236,7 @@ access problems e.g. Long short-term memory(LSTM) and Gated recurrent units (GRU
 	Journal of Machine Learning Research, 3, 1137–1155.
 	
 	\bibitem{cs224n} 
-	Standford CS224n Lecture-6 Language Models and RNNS.
+	Stanford CS224n Lecture-6 Language Models and RNNS.
 	\href{http://www.cs.umd.edu/class/fall2016/cmsc723/slides/slides_08.pdf}{Lecture Slides}.
 	\href{http://web.stanford.edu/class/cs224n/readings/cs224n-2019-notes05-LM_RNN.pdf}{Lecture Notes}.
 	\href{https://www.youtube.com/watch?v=iWea12EAu6U}{Youtube Video}.
