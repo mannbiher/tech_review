@@ -109,42 +109,58 @@ Bengio et al introduced a Neural Probabilistic Langugae Model. It was
 first large-scale deep learning model for natural language processing.
 This model learns a \textit{distributed representation of words}, along
 with the probability function for word sequences expressed in terms of
-these representations.
+these representations. Figure \ref{fig:nplm} shows the corresponding
+neural network architecture. The input word vectors are used by both
+the hidden layer and output layer.
 
-\begin{figure}
-	\includegraphics[scale=0.5]{images/Neural_Language_Model.png}
+% In this model, the probabilistic prediction $P(x^{(t+1)}|x^{(t)},...,x^{(t-n+2)})$
+% is obtained as follows. First each word 
+
+\begin{figure}[ht]
+	\includegraphics[scale=0.3]{images/Neural_Language_Model.png}
 	\caption{The first deep neural network architecture model
 	for NLP presented by Bengio et al.}
+	\label{fig:nplm}
 \end{figure}
 
 
-Equation represents 
+Equation \ref{eq:nplm} represents Figure \ref{fig:nplm} and shows the
+parameters of the $softmax()$ function, consisting of standard $tanh()$
+function (i.e. the hidden layer) as well as the linear function, 
+$W^{(3)}x + b^{(3)}$, that captures all the previous $n$ input word vectors.
 
-A simplified version of this mode
+A simplified version of this model can be seen in Figure
+\ref{fig:nplmsimple}, where the blue layer represents
+concatenated word embedggings for the input words:
+$e = [e^{(1)};e^{(2)};e^{(3)};e^{(4)}]$, the red layer signifies
+the hidden layer: $h = f(W_e + b_1)$, and the green output distribution
+is a softmax over the vocabulary: $\hat{y} = softmax(Uh + b_2)$.
+
 
 \begin{figure}
-	\includegraphics[scale=0.5]{images/Simplified_Neural_Language_Model.png}
-	\caption{A simplified representation of }
+	\includegraphics[scale=0.4]{images/Simplified_Neural_Language_Model.png}
+	\caption{A simplified representation of Figure \ref{fig:nplm}}
+	\label{fig:nplmsimple}
 \end{figure}
 
 \begin{align}
 	\hat{y} &= softmax(W^{(2)}tanh(W^{(1)}x 
-			+  b^{(1)}) + W^{(3)}x + b^{(3)}) \\
-	\hat{y} &= softmax(Uh + b_2) \in \mathbb{R}^{|V|}
+			+  b^{(1)}) + W^{(3)}x + b^{(3)}) \label{eq:nplm} \\
+	\hat{y} &= softmax(Uh + b_2) \in \mathbb{R}^{|V|} \label{eq:nplmsimple} 
 \end{align}
 
 
 \subsection{Pros}
 \begin{itemize}
 	\item No sparsity problem
-	\item  Don't need to store all observed n-grams
+	\item Don't need to store all observed n-grams
 \end{itemize}
 
 \subsection{Cons}
 \begin{itemize}
 	\item Fixed window is too small
 	\item Enlarging window enlarges $W$
-	\item Window can never be large enough!
+	\item Window can never be large enough
 	\item $x^{(1)}$ and $x^{(2)}$ are multiplied by completely different
 	weights in $W$. No symmetry in how the inputs are processed.
 \end{itemize}
@@ -155,12 +171,30 @@ window of previous words would be considered for conditioning
 the language model, Recurrent Neural Networks (RNN) are capable
 of conditioning the model on all previous words in the corpus.
 
-Figure introduces RNN
+Figure \ref{fig:rnn} introduces RNN architecture where each
+vertical reactangular box is a hidden layer at a time-step $t$.
+Each such layer holds a number of neurons, each of which performs
+a linear matrix operation on its inputs followed by a non-linear
+operation (e.g. $tanh()$). At each time-step, there are two inputs
+to the hidden layer: the output of previous layer $h_{t-1}$, and
+the input at that timestep $x_t$. The former input is multiplied
+by a weight matrix $W^{(hx)}$ to produce output features $h_t$,
+which are multiplied with a weight matrix $W^{(S)}$ and run through
+a softmax over the vocabulary to obtain a prediction output $\hat{y}$
+of the next word(Equation \ref{eq:weight} and \ref{eq:sfmax}).
 
 \begin{align}
-	h_t &= \alpha(W^{(hh)}h_{t-1} + W^{(hx)}x_{[t]}) \\
-	\hat{y}_{t} &= softmax(W^{(S)}h_t)
+	h_t &= \alpha(W^{(hh)}h_{t-1} + W^{(hx)}x_{[t]}) \label{eq:weight} \\
+	\hat{y}_{t} &= softmax(W^{(S)}h_t) \label{eq:sfmax}
 \end{align}
+
+\begin{figure}[ht]
+	\includegraphics[scale=0.3]{images/RNN.png}
+	\caption{An RNN Language Model}
+	\label{fig:rnn}
+\end{figure}
+
+
 
 \subsection{Pros}
 \begin{itemize}
@@ -183,12 +217,30 @@ Figure introduces RNN
 
 
 \section{Summary}
-We see RNN are going to be the next big thing for Statistical Language Models
+In this review we compared n-grams, neaural and its improvment RNN language model.
+We noticed even though n-gram suffers from storage and sparsity problem. It's performance
+is better than neural language models with comparable accuracy. Neural language model
+provides better accuracy, but its accuracy is again restricted by window size. RNN overcomes
+the issue with neural language model, but is slow and cannot access information from
+many steps. Recently few models are developed over RNN which deals with performance and information
+access problems e.g. Long short-term memory(LSTM) and Gated recurrent units (GRUs).
+
+\begin{thebibliography}{9}
+	\bibitem{iretrieval}
+	ChengXiang Zhai and Sean Massung.
+	\textit{Text Data Management and Analysis: A Practical Introduction to Information Retrieval and Text Mining}. 
+	
+	\bibitem{bengio} 
+	Yoshua Bengio, Réjean Ducharme, Pascal Vincent and Christian Jauvin(2003).
+	\href{https://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf}{\textit{A Neural Probabilistic Language Model}}.
+	Journal of Machine Learning Research, 3, 1137–1155.
+	
+	\bibitem{cs224n} 
+	Standford CS224n Lecture-6 Language Models and RNNS.
+	\href{http://www.cs.umd.edu/class/fall2016/cmsc723/slides/slides_08.pdf}{Lecture Slides}.
+	\href{http://web.stanford.edu/class/cs224n/readings/cs224n-2019-notes05-LM_RNN.pdf}{Lecture Notes}.
+	\href{https://www.youtube.com/watch?v=iWea12EAu6U}{Youtube Video}.
+\end{thebibliography}
 
 
-\section{Reference}
-\url{https://web.stanford.edu/~jurafsky/slp3/3.pdf}
-\url{http://web.stanford.edu/class/cs224n/readings/cs224n-2019-notes05-LM_RNN.pdf}
-\url{http://www.cs.umd.edu/class/fall2016/cmsc723/slides/slides_08.pdf}
-\url{https://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf}
 \end{document}
